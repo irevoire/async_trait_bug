@@ -1,7 +1,3 @@
-trait Foo {
-    const FOO: u32;
-}
-
 #[async_trait::async_trait]
 trait Bar {
     async fn bar();
@@ -9,7 +5,7 @@ trait Bar {
 
 struct Baz {}
 
-impl Foo for Baz {
+impl Baz {
     const FOO: u32 = 3;
 }
 
@@ -17,16 +13,12 @@ impl Foo for Baz {
 impl Bar for Baz {
     async fn bar() {
         println!("bar: {}", Self::FOO);
-    }
-}
-
-impl Baz {
-    fn baz() {
-        println!("baz: {}", Self::FOO);
+        // The following code fix the issue
+        // let tmp = Self::FOO;
+        // println!("bar: {}", tmp);
     }
 }
 
 fn main() {
-    Baz::baz();
     Baz::bar();
 }
